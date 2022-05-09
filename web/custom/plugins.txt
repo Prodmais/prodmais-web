@@ -1,0 +1,15 @@
+Plugins
+https://github.com/kartik-v/yii2-widgets
+composer require kartik-v/yii2-widgets "*"
+-
+Imagem
+https://www.yiiframework.com/extension/yiisoft/yii2-imagine
+composer require --prefer-dist yiisoft/yii2-imagine
+-
+PDF
+https://github.com/kartik-v/yii2-mpdf
+composer require kartik-v/yii2-mpdf "dev-master"
+-
+XLS
+https://github.com/PHPOffice/PhpSpreadsheet
+composer require phpoffice/phpspreadsheet

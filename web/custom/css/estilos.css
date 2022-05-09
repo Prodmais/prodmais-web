@@ -1,0 +1,32 @@
+
+.btn{
+  border-radius: 0 !important;
+}
+
+.m-l-5{
+  margin-left: 5px;
+}
+
+.select2-selection__rendered {
+  margin-top: 1px !important;
+}
+
+.select2-container--krajee .select2-selection--single .select2-selection__arrow{
+  border-left: none !important;
+}
+
+.select-dropdown {
+  position: static !important;
+}
+.select-dropdown .select-dropdown--above {
+      margin-top: 336px !important;
+}
+/*#date_data_curso_mopp { z-index: 2000 !important; }*/
+
+[class^='select2'] {
+  border-radius: 0px !important;
+}
+
+.file-preview > button.fileinput-remove > span{
+  display: none !important;
+}

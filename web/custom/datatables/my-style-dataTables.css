@@ -1,0 +1,83 @@
+/* dataTables Button Create float */
+.dataFloatButtonCreate {
+    float: right;
+    margin-left: 10px;
+}
+
+.pane_header_datatable>div.addItem {
+    float: right;
+    margin-left: 10px;
+}
+
+.pane_header_datatable {
+    height: 50px;
+}
+
+.dataTables_length {
+    margin-top: -2.5em;
+    color: #686868 !important;
+}
+
+.dataTables_length label {
+    font-weight: 300 !important;
+}
+
+table.dataTable {
+    width: 100%;
+    margin: 0 auto;
+    clear: both;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border: 0px !important;
+}
+
+.dataTables_filter input {
+    font-weight: 300 !important;
+    border: 1px solid #e4e7ea !important;
+    height: 30px;
+    padding: 5px;
+}
+
+.dataTables_filter input:focus {
+    font-weight: 300 !important;
+    border: 1px solid #337ab780 !important;
+}
+
+.dataTables_length select {
+    height: 30px;
+    border: 1px solid #e4e7ea !important;
+    background: #fff !important;
+}
+
+@media only screen and (max-width: 411px) {
+  div.has-feedback>input {
+    width: 100%;
+    /*background:blue;*/
+  }
+  .dataTables_length{
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  div.has-feedback>input {
+    width: 190px !important;
+    /*background:red;*/
+  }
+  .dataTables_length{
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  div.has-feedback>input {
+    width: 150px !important;
+    /*background:green;*/
+  }
+  .dataTables_length{
+    display: none !important;
+  }
+}
+

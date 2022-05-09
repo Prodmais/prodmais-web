@@ -1,0 +1,72 @@
+version: "3.3"
+
+services:
+
+  db:
+    restart: always
+    container_name: mysql-container
+    image: mysql:5.7
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql # named volume
+      # - ./tt_docxyz:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "Senha123"
+      MYSQL_DATABASE: "prodmais"
+    networks:
+      - minha-rede
+
+  phpmyadmin:
+    restart: always
+    container_name: phpmyadmin-container
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: "Senha123"
+      MYSQL_DATABASE: "prodmais"
+    ports:
+      - "8080:80"
+    networks:
+      - minha-rede
+    depends_on:
+      - db
+
+  web:
+    restart: always
+    container_name: php-container
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    image: php.dockerfile
+    ports:
+      - "8888:80"
+    depends_on:
+      - db
+      - phpmyadmin
+    volumes:
+      - .:/var/www/html # bind mount
+    networks:
+      - minha-rede
+
+  composer:
+    #user: 1000:1000 #non-root
+    container_name: composer-container
+    image: composer:1.6
+    volumes:
+      - .:/var/www/html
+    working_dir: "/var/www/html"
+    # command: composer install --ignore-platform-reqs
+    command: |
+      bash -c "composer install --ignore-platform-reqs && chmod -R 777 /var/www/html && chown -R $USER:$USER /var/www/html"
+    networks:
+      - minha-rede
+    depends_on:
+      - web
+
+networks:
+  minha-rede:
+    driver: bridge
+
+volumes:
+  db_data:

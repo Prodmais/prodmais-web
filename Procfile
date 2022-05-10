@@ -1,1 +1,1 @@
-web: composer install --no-dev
+web: vendor/bin/heroku-php-apache2

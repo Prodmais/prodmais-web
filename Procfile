@@ -1,1 +1,1 @@
-web: composer install
+web: composer install --no-dev

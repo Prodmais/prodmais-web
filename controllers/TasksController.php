@@ -176,7 +176,7 @@ class TasksController extends Controller
         $data=[
             'name'=> $alterar->name,
             'description'=> $alterar->description,
-            'status'=> $alterar->status == 'Done' ? 1 : 2
+            'status'=> $alterar->status == 'Doing' ? 1 : 2
         ];
         $payload = json_encode( $data );
 

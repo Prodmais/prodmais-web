@@ -1,12 +1,12 @@
 <!-- @DESC assim que entrar na pagina carrega os itens via ajax -->
 <?php
   // carregando os itens
-  $this->registerJs("
-  $(document).ready(function(){
+  // $this->registerJs("
+  // $(document).ready(function(){
 
-    carregaQuadrosUsuario();
+  //   // carregaQuadrosUsuario();
 
-  });", \yii\web\View::POS_READY, Yii::$app->getSecurity()->generateRandomString());
+  // });", \yii\web\View::POS_READY, Yii::$app->getSecurity()->generateRandomString());
 ?>
 
 <?php
@@ -35,7 +35,7 @@
   function cadastrarAjax() {
 
     $('#modal_custom').modal();
-    $('#label_modal').html('Novo board');
+    $('#label_modal').html('NOVO BOARD');
 
     $.ajax({
       beforeSend: function () { $('.div-loader').show(); },
@@ -61,7 +61,7 @@
   function atualizarAjax(id) {
 
     $('#modal_custom').modal();
-    $('#label_modal').html('Atualizar board');
+    $('#label_modal').html('ATUALIZAR BOARD');
 
     $.ajax({
       beforeSend: function () { $('.div-loader').show(); },
@@ -90,13 +90,13 @@
   function excluirQuadro(id) {
 
     swal({
-      title: 'Excluir board!?',
+      title: 'EXCLUIR BOARD!?',
       text: 'Deseja remover o item selecionado?',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Sim, remover!',
-      cancelButtonText: 'Não, cancelar!',
+      confirmButtonText: 'SIM, remover!',
+      cancelButtonText: 'NÃO, cancelar!',
       closeOnConfirm: true,
       closeOnCancel: true
     },

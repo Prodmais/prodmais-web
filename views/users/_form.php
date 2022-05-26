@@ -1,11 +1,6 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Pessoa */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="login-box-body">
@@ -25,17 +20,16 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'pess_telefone')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <!-- SubmitButton Widget -->
-        <?php echo Html::submitButton(Html::encode('CADASTRAR'), [
-            'id' => '',
-            'class' => Html::encode('btn-block btn btn-success')
-          ])
-        ?>
-    </div>
+      <div class="form-group">
+        <!--" SubmitButton Widget -->
+        <?php echo \app\widgets\submitButton\SubmitButtonWidget::widget([
+          'text' => 'CADASTRAR',
+          'classButton' => 'btn-block btn btn-success'
+        ]) ?>
+      </div>
 
-      <div style="margin-top: 15px" >
-         <?= Html::a('ENTRAR', ['/site/login'], ['class'=>'btn btn-block btn-primary']); ?>
+      <div>
+        <?php echo Html::a('ENTRAR', ['/site/login'], ['class'=>'btn btn-block btn-default']); ?>
       </div>
 
     <?php ActiveForm::end(); ?>

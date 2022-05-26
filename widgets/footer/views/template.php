@@ -1,7 +1,7 @@
 
 <footer class="main-footer">
   <div class="pull-right hidden-xs">
-    <b>v1.0.1</b>
+    <b>v1.1.6</b>
   </div>
   <?= DATE('Y') ?>
 </footer>
@@ -13,11 +13,11 @@
       initializeTimeStamp();
       function initializeTimeStamp() {
         setTimeout(function(){
-          $('.flash-message-user').slideUp(200).delay(5).queue(function(){
+          $('.alert').slideUp(200).delay(1).queue(function(){
           $('.close').trigger('click');
           });
           initializeTimeStamp();
-        }, 3000);
+        }, 5000);
       }
   });", \yii\web\View::POS_READY);
 ?>

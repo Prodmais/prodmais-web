@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db.php';
 $baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
 
 $config = [
-    'id' => '^ujd45Yyg05*2b3v*YNoF6Gp8uIoXiq!qyl#vJr*exImGOruTL',
+    'id' => '#iRFOp#qq!#cHfjXz2WnqdZfM&5dp52avK!6L&@UEEMCXuHf@x',
     'basePath' => dirname(__DIR__),
 
     'language' => 'pt-BR',
@@ -33,11 +33,14 @@ $config = [
         'Utils' => [
             'class' => 'app\components\Utils'
         ],
+        'Messages' => [
+            'class' => 'app\components\Messages'
+        ],
         // CUSTOM PARAMS ----------------------------------
 
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'zMGtJs1ZkM%*X&jfHTuzPO0s%Yu5Rl2UbGn$yBZmudrck%n1Ej',
+            'cookieValidationKey' => 'wGZ!IvZ*LLJwP44amB0V2triYgvCfZ5&tQJpSLzkjuNOg6AAnU',
             'baseUrl' => $baseUrl,
         ],
         'cache' => [
@@ -102,12 +105,12 @@ $config = [
 
 if (ENVIRONMENT == 'dev') {
     // configuration adjustments for 'dev' environment
-    // $config['bootstrap'][] = 'debug';
-    // $config['modules']['debug'] = [
-    //     'class' => 'yii\debug\Module',
-    //     // uncomment the following to add your IP if you are not connecting from localhost.
-    //     //'allowedIPs' => ['127.0.0.1', '::1'],
-    // ];
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        'allowedIPs' => ['*'],
+    ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [

@@ -31,9 +31,11 @@ class AppAsset extends AssetBundle
         'web/custom/js/bootbox2.js',
         'web/custom/js/yii_overrides.js',
         'web/custom/js/sweetalert.min.js',
+        // 'web/custom/js/jquery-ui.js', // draggable ui
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        
     ];
 }

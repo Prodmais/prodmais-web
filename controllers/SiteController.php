@@ -96,7 +96,7 @@ class SiteController extends Controller
             
             $this->geToken($model);
 
-            Yii::$app->getResponse()->redirect(["/boards/meus"])->send();
+            Yii::$app->getResponse()->redirect(["/boards"])->send();
         }
 
         $model->password = '';
@@ -122,7 +122,7 @@ class SiteController extends Controller
     // @DESC recebendo o token JWT
     private function geToken($model) {
 
-        $url = 'https://'.HOST.'/login';
+        $url = HOST.'/login';
 
         $data=[
             'email'=> $model->name,

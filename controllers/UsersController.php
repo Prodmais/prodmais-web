@@ -62,18 +62,18 @@ class UsersController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Users();
+    // public function actionCreate()
+    // {
+    //     $model = new Users();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->render('create', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Updates an existing Users model.
@@ -82,18 +82,18 @@ class UsersController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+    // public function actionUpdate($id)
+    // {
+    //     $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->render('update', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Deletes an existing Users model.
@@ -102,12 +102,12 @@ class UsersController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    // public function actionDelete($id)
+    // {
+    //     $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
+    //     return $this->redirect(['index']);
+    // }
 
     /**
      * Finds the Users model based on its primary key value.
@@ -162,14 +162,9 @@ class UsersController extends Controller
         // post
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
-
-        //for debug only!
-        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         
         // Set the content type to application/json
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-        
         
         // Return response instead of outputting
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -180,6 +175,8 @@ class UsersController extends Controller
         // @DESC tornando o arquivo JSON para string
         $json_decode = json_decode($resp, true);
 
+        
+        \Yii::$app->getSession()->setFlash('success', 'Cadastro realizado com sucesso!');
         return $this->redirect(['/site/login']);
 
     }

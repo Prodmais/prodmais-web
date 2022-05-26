@@ -31,93 +31,6 @@ class BoardsController extends Controller
         ];
     }
 
-    /**
-     * Lists all Boards models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new BoardsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Boards model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Boards model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Boards();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Boards model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Boards model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Boards model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Boards the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Boards::findOne($id)) !== null) {
@@ -127,33 +40,47 @@ class BoardsController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    // -----------------------------
-    // -----------------------------
-    // @DESC carrega os quadros do usuario
-    public function actionMeus() {
+    public function actionIndex_old() {
         return $this->render('quadro-usuario/index');
     }
 
-    // @DESC retorna todos os quadros do usuario
-    public function actionAllQuadros() {
+    // -----------------------------
+    // -----------------------------
+    // @DESC carrega os quadros do usuario
+    // public function actionMeus() {
+    //     return $this->render('quadro-usuario/index');
+    // }
 
+    // @DESC retorna todos os quadros do usuario
+    public function actionIndex() {
+
+        // @DESC id do usuario logado
         $idLogged = yii::$app->user->identity->id;
 
+        // @DESC encontra todos os boards do usuario logado
         $dataQuadro = Boards::find()
+        ->select(['id', 'name', 'isMobile'])
         ->where(['userId' => $idLogged])
         ->all();
 
+        // @DESC encontra todos as tasks do usuario logado baseado no board
         foreach ($dataQuadro as $key => $value) {
             $dataQuadro[$key]['lista_tarefa'] =
             Tasks::find()
+            ->select(['id', 'name', 'status'])
             ->where(['boardId' => $value->id])
+            ->orderBy(['status' => SORT_ASC])
             ->all();
         }
 
-        // echo "<pre>". print_r($dataQuadro, 1) ."</pre>";
+
+        // print '<pre>';
+        //     print_r($dataQuadro);
+        // print '<pre>';
         // die();
 
-        return $this->renderAjax('quadro-usuario/quadros', [
+
+        return $this->render('quadro-usuario/index', [
             'dataQuadro' => $dataQuadro
         ]);
 
@@ -162,33 +89,40 @@ class BoardsController extends Controller
     // @DESC cadastrar via ajax
     public function actionCreateAjax()
     {
+
         $model = new Boards();
         $model->userId = yii::$app->user->identity->id;
-        $model->isMobile = false;
+        // $model->isMobile = false;
 
         if (
             $model->load(Yii::$app->request->post()) &&
             $model->validate()
         ) {
 
-            $url = 'https://'.HOST.'/board';
+            $url = HOST.'/board';
 
             $data=[
                 'name'=> $model->name,
                 'description'=> $model->description,
-                'isMobile'=> $model->isMobile
+                'isMobile'=> false
             ];
+
+            // removend campos vazios
+            $data = array_filter( $data, 'strlen' );        
+
             $payload = json_encode( $data );
+
 
             // Prepare the authorisation token
             $authorization = "Authorization: Bearer ".\Yii::$app->session['jwt'];
-    
+            
             $curl = curl_init($url);
     
             curl_setopt($curl, CURLOPT_URL, $url);
     
             // post
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
             
             // Set the content type to application/json
@@ -222,12 +156,16 @@ class BoardsController extends Controller
             $model->validate()
         ) {
 
-            $url = 'https://'.HOST.'/board/'.$id;
+            $url = HOST.'/board/'.$id;
 
             $data=[
                 'name'=> $model->name,
                 'description'=> $model->description
             ];
+
+            // removend campos vazios
+            $data = array_filter( $data, 'strlen' );   
+            
             $payload = json_encode( $data );
 
             $authorization = "Authorization: Bearer ".\Yii::$app->session['jwt']; // Prepare the authorisation token
@@ -236,7 +174,7 @@ class BoardsController extends Controller
     
             curl_setopt($curl, CURLOPT_URL, $url);
     
-            // post
+            // put
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
             curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
@@ -266,7 +204,14 @@ class BoardsController extends Controller
     {
         $id = $_POST['id'];
 
-        $url = 'https://'.HOST.'/board/'.$id;
+        $model = $this->findModel($id);
+
+        // @DESC nao deixar excluir se for mobile
+        if (isset($model) && $model->isMobile) {
+            return true;
+        }
+
+        $url = HOST.'/board/'.$id;
 
         $authorization = "Authorization: Bearer ".\Yii::$app->session['jwt']; // Prepare the authorisation token
 
@@ -274,7 +219,7 @@ class BoardsController extends Controller
 
         curl_setopt($curl, CURLOPT_URL, $url);
 
-        // post
+        // delete
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
         

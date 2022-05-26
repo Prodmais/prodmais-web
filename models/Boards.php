@@ -50,7 +50,7 @@ class Boards extends \yii\db\ActiveRecord
             [['description'], 'string', 'max' => 255],
             [['userId'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['userId' => 'id']],
             // my rules --------------------------------
-            [['name'], 'unique'],
+            // [['name'], 'unique'],
             [$strings, 'trim'],
             [$strings, 'filter', 'filter'=>'mb_strtolower'],
             // my rules -------------------------------
@@ -92,4 +92,14 @@ class Boards extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Tasks::className(), ['boardId' => 'id']);
     }
+
+    // @DESC tudo o que for de ID é preciso criptografar
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        // echo "13";
+        // die();
+    }
+
 }

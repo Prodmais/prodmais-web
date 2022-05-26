@@ -46,9 +46,9 @@ class Users extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 40],
             [['email', 'password', 'token'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 25],
-            [['email'], 'unique'],
-
+            
             // my rules --------------------------------
+            [['email'], 'unique', 'message' => '{attribute} indisponível'],
             [['email'], 'email'],
             [['password', 'password_confirm'], 'string', 'min' => 6],
             [$strings, 'trim'],

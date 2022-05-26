@@ -17,7 +17,13 @@ use kartik\widgets\Select2;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'description', [])
+    ->textArea([
+        'autofocus' => false,
+        'placeholder'=>'Description.',
+        'rows' => 6,
+        'style' => 'resize:none'
+    ])?>
 
     <div class="form-group">
         <!-- SubmitButton Widget -->
@@ -58,7 +64,7 @@ use kartik\widgets\Select2;
 
                 if(data != 1) {
 
-                    swal(\"Ops!\", \"1 ou mais campos estão inválidos!\", \"error\");
+                    swal(\"OPS!\", \"1 ou mais campos estão inválidos!\", \"error\");
                     $('#submit-fake').toggle();
                     $('#submit-real').toggle();
 
@@ -66,8 +72,8 @@ use kartik\widgets\Select2;
 
                   swal({
 
-                    title: 'Sucesso!',
-                    text: 'Quadro salvo sucesso!',
+                    title: 'SUCESSO!',
+                    text: 'Board salvo sucesso!',
                     type: 'success',
                     confirmButtonText: 'Ok!',
                     closeOnConfirm: true,
@@ -79,7 +85,8 @@ use kartik\widgets\Select2;
                         $('.modal-backdrop').hide();
                         $('.modal').modal('hide');
                         $('body').removeClass('modal-open');
-                        carregaQuadrosUsuario();
+                        // carregaQuadrosUsuario();
+                        window.location.replace('".Yii::$app->urlManager->createUrl('/boards')."');
                     }
                   });
 

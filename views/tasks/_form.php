@@ -19,40 +19,31 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'description', [])
+    ->textArea([
+        'autofocus' => false,
+        'placeholder'=>'Description.',
+        'rows' => 6,
+        'style' => 'resize:none'
+    ])?>
 
-    <?php
-        // update
-        if (!$model->isNewRecord) {
-            $model->endDate =
-            date("d/m/Y", strtotime($model->endDate));
-        } else { //create
-            $model->endDate = date('d/m/Y');
-        }
+    <?php if(!$model->isNewRecord): ?>
 
-        echo $form->field($model, 'endDate')->widget(DatePicker::classname(), [
-        // 'value' => date('d/m/Y'),
-        'removeButton' => false,
-        'language' => 'pt',
-        'options' => [
-            // 'orientation' => 'bottom',
-            // 'id' => 'xyz',
-            'class' => 'form-control',
-            'autocomplete' => 'off',
-            'placeholder' => 'dd/mm/yyyy'
+      <?php
+        echo $form->field($model, 'status')->widget(Select2::classname(), [
+        'data' => [
+          1 => 'Fazer',
+          2 => 'Fazendo',
+          3 => 'Feito'
         ],
+        'language' => 'pt-br',
         'pluginOptions' => [
-            'orientation' => 'bottom',
-            'autoclose' => true,
-            'format' => 'dd/mm/yyyy',
-            'todayHighlight' => true,
-            // 'startDate' => date("d/m/Y")
-        ],
-        'pluginEvents' => [
-            'changeDate' => "function(e){
-        }"]
-        ])->label('Data de finalização');
-    ?>
+          'allowClear' => false
+        ]
+        ])->label('Status');
+      ?>
+
+    <?php endif ?>
 
     <div class="form-group">
 
@@ -65,7 +56,7 @@ use kartik\date\DatePicker;
       </div>
 
       <?php if(!$model->isNewRecord): ?>
-        <button onclick="excluirTarefaAjax('<?= $model->id ?>')" type="button" id="" class="btn btn-block btn btn-danger">
+        <button onclick="excluirTarefaAjax('<?= $model->id ?>')" type="button" id="" class="btn-remove btn btn-block btn btn-danger">
           <i class="fa fa-trash-o"></i> EXCLUIR
         </button>
       <?php endif ?>
@@ -85,6 +76,7 @@ use kartik\date\DatePicker;
 
       $('#submit-real').toggle();
       $('#submit-fake').toggle();
+      $('.btn-remove').toggle();
 
       var form = $(this);
       var formData = form.serialize();
@@ -99,16 +91,17 @@ use kartik\date\DatePicker;
 
           if(data != 1) {
 
-            swal(\"Ops!\", \"1 ou mais campos estão inválidos!\", \"error\");
+            swal(\"OPS!\", \"1 ou mais campos estão inválidos!\", \"error\");
             $('#submit-fake').toggle();
             $('#submit-real').toggle();
+            $('.btn-remove').toggle();
 
           } else {
 
             swal({
 
-              title: 'Sucesso!',
-              text: 'Tarefa salva com sucesso!',
+              title: 'SUCESSO!',
+              text: 'Task salva com sucesso!',
               type: 'success',
               confirmButtonText: 'Ok!',
               closeOnConfirm: true,
@@ -117,10 +110,11 @@ use kartik\date\DatePicker;
             },
             function(isConfirm){
               if (isConfirm) {
-                $('.modal-backdrop').hide();
-                $('.modal').modal('hide');
-                $('body').removeClass('modal-open');
-                carregaQuadrosUsuario();
+                // $('.modal-backdrop').hide();
+                // $('.modal').modal('hide');
+                // $('body').removeClass('modal-open');
+                // carregaQuadrosUsuario();
+                window.location.replace('".Yii::$app->urlManager->createUrl('/boards')."');
               }
             });
 
@@ -144,13 +138,13 @@ use kartik\date\DatePicker;
   function excluirTarefaAjax(id) {
 
     swal({
-      title: 'Excluir task!?',
+      title: 'EXCLUIR TASK!?',
       text: 'Deseja remover o item selecionado?',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Sim, remover!',
-      cancelButtonText: 'Não, cancelar!',
+      confirmButtonText: 'SIM, remover!',
+      cancelButtonText: 'NÃO, cancelar!',
       closeOnConfirm: true,
       closeOnCancel: true
     },

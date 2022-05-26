@@ -46,6 +46,8 @@ class Tasks extends \yii\db\ActiveRecord
             [['status'], 'string', 'max' => 20],
             [['boardId'], 'exist', 'skipOnError' => true, 'targetClass' => Boards::className(), 'targetAttribute' => ['boardId' => 'id']],
             // my rules --------------------------------
+            // 1 - do, 2 - doing, 3 - done | fazer, fazendo, feito
+            [['status'], 'integer', 'min' => 1, 'max' => 3],
             [$strings, 'trim'],
             [$strings, 'filter', 'filter'=>'mb_strtolower']
             // my rules -------------------------------

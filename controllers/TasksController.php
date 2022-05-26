@@ -45,23 +45,26 @@ class TasksController extends Controller
             $model->validate()
         ) {
 
-            $url = 'https://'.HOST."/board/".$id.'/task';
+            $url = HOST."/board/".$id.'/task';
 
             $data=[
                 'name'=> $model->name,
                 'description'=> $model->description,
-                // 'endDate'=> '2222-10-10' .' '. '00:00:00.000 -0400',
                 'status'=> $model->status
             ];
+
+            // removend campos vazios
+            $data = array_filter( $data, 'strlen' );   
+
             $payload = json_encode( $data );
     
             $curl = curl_init($url);
     
             curl_setopt($curl, CURLOPT_URL, $url);
-            // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     
             // post
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
     
             // Prepare the authorisation token
@@ -79,10 +82,6 @@ class TasksController extends Controller
             // @DESC tornando o arquivo JSON para string
             $json_decode = json_decode($resp, true);
 
-            // print_r($model);
-            // print_r($json_decode);
-            // die();
-
             return true;
         }
 
@@ -98,31 +97,36 @@ class TasksController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     public function actionUpdateAjax($id)
     {
         $model = $this->findModel($id);
-        $model->status = 2;
+        $model->status = $this->converteStatus($model->status);
 
         if (
             $model->load(Yii::$app->request->post()) &&
             $model->validate()
         ) {
 
-            $url = 'https://'.HOST.'/board/'.$model->boardId."/".$id;
+            $url = HOST.'/board/'.$model->boardId."/task/".$id;
 
             $data=[
                 'name'=> $model->name,
-                'description'=> $model->description
+                'description'=> $model->description,
+                'status'=> $model->status,
             ];
+            // removend campos vazios
+            $data = array_filter( $data, 'strlen' );   
+            
             $payload = json_encode( $data );
 
             $authorization = "Authorization: Bearer ".\Yii::$app->session['jwt']; // Prepare the authorisation token
-    
+
             $curl = curl_init($url);
     
             curl_setopt($curl, CURLOPT_URL, $url);
     
-            // post
+            // put
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
             curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
@@ -139,6 +143,11 @@ class TasksController extends Controller
             // @DESC tornando o arquivo JSON para string
             $json_decode = json_decode($resp, true);
 
+            // @DESC se for done entao exibe mensagem
+            if ($model->status == 3) {
+                \Yii::$app->getSession()->setFlash('info', \Yii::$app->Messages->getMessage());
+            }
+
             return true;
             
         }
@@ -146,6 +155,27 @@ class TasksController extends Controller
         return $this->renderAjax('_form', [
             'model' => $model,
         ]);
+    }
+
+    // @DESC convert status nominal para numerico
+    private function converteStatus($status) {
+
+        switch ($status) {
+            case 'Do':
+                $status = 1;
+                break;
+            case 'Doing':
+                $status = 2;
+                break;
+            case 'Done':
+                $status = 3;
+                break;
+            default:
+                $status = 1;
+                break;
+        }
+        
+        return $status;
     }
 
     /**
@@ -164,55 +194,13 @@ class TasksController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    // @DESC finalizar tarefa
-    public function actionAlterarStatus()
-    {
-        $id = $_POST['id'];
-
-        $alterar = $this->findModel($id);
-
-        $url = 'https://'.HOST.'/board/'.$alterar->boardId."/task/".$id;
-
-        $data=[
-            'name'=> $alterar->name,
-            'description'=> $alterar->description,
-            'status'=> $alterar->status == 'Doing' ? 1 : 2
-        ];
-        $payload = json_encode( $data );
-
-        $authorization = "Authorization: Bearer ".\Yii::$app->session['jwt']; // Prepare the authorisation token
-
-        $curl = curl_init($url);
-
-        curl_setopt($curl, CURLOPT_URL, $url);
-
-        // post
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
-        
-        // Set the content type to application/json
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
-        
-        // Return response instead of outputting
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $resp = curl_exec($curl);
-        curl_close($curl);
-
-        // @DESC tornando o arquivo JSON para string
-        $json_decode = json_decode($resp, true);
-
-        return true;
-    }
-
     // @DESC excluir via ajax
     public function actionRemoverAjax()
     {
         $id = $_POST['id'];
         $remove = $this->findModel($id);
 
-        $url = 'https://'.HOST.'/board/'.$remove->boardId."/task/".$id;
+        $url = HOST.'/board/'.$remove->boardId."/task/".$id;
 
         $authorization = "Authorization: Bearer ".\Yii::$app->session['jwt']; // Prepare the authorisation token
 
@@ -220,7 +208,7 @@ class TasksController extends Controller
 
         curl_setopt($curl, CURLOPT_URL, $url);
 
-        // post
+        // delete
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
         

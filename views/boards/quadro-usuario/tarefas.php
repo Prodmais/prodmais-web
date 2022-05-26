@@ -1,36 +1,39 @@
-<ul class="todo-list ui-sortable">
+<style>
+.task-item:hover{
+   border-color: #00AFB7 !important;
+}
+</style>
+
+<ul class="todo-list ui-sortable" style="cursor: pointer !important;">
 
    <!-- verificando se existe tarefa cadastrada -->
    <?php if (count($value->lista_tarefa) >= 1): ?>
 
       <?php foreach ($value->lista_tarefa as $keyTarefa => $valueTarefa): ?>
 
-         <li class="" style="cursor: pointer;">
+         <li class="task-item" style="cursor: pointer !important;" onclick="atualizarTarefaAjax('<?= $valueTarefa->id ?>')">
+            <div class="overflow-spaces">
 
-            <span class="handle ui-sortable-handle">
-               <i class="fa fa-ellipsis-v"></i>
-               <i class="fa fa-ellipsis-v"></i>
-            </span>
+               <span class="handle ui-sortable-handle">
 
-            <input onclick="alterarStatus('<?= $valueTarefa->id ?>')" type="checkbox" value="">
+                  <?php
+                     switch ($valueTarefa->status) {
+                        case 'Doing':
+                           echo '<small style="color: #dd4b39" class="text"> '.strtoupper($valueTarefa->status). ' | ' .$valueTarefa->name .'</small>';
+                           break;
 
-            <span onclick="atualizarTarefaAjax('<?= $valueTarefa->id ?>')">
+                           case 'Done':
+                              echo '<small style="color: green;  text-decoration: line-through !important;" class="text"> '.strtoupper($valueTarefa->status). ' | ' .$valueTarefa->name .'</small>';
+                              break;
+                        
+                        default:
+                           echo '<small style="color: gray" class="text"> '.strtoupper($valueTarefa->status). ' | ' .$valueTarefa->name .'</small>';
+                           break;
+                     }
+                  ?>
+                  
+               </span>
 
-               <?php if ($valueTarefa->status !== 'Do' ): ?>
-                  <span style="text-decoration: line-through !important;" class="text text-danger"><?= $valueTarefa->name ?></span>
-               <?php else: ?>
-                  <span class="text"><?= $valueTarefa->name ?></span>
-               <?php endif ?>
-
-               <small class="label label-default">
-                  <i class="fa fa-clock-o"></i>
-                  <?= Yii::$app->Utils->exibeData($valueTarefa->createdAt) ?>
-               </small>
-            </span>
-
-            <div class="tools hidden">
-               <i class="fa fa-edit"></i>
-               <i class="fa fa-trash-o"></i>
             </div>
          </li>
 
@@ -39,7 +42,7 @@
    <?php else: ?>
 
       <div class="callout callout-info">
-         <h4>Nenhuma tarefa no quadro!</h4>
+         <h4>No Task!</h4>
       </div>
 
    <?php endif ?>
@@ -47,5 +50,5 @@
 </ul>
 
 <div class="box-footer clearfix no-border">
-   <button onclick="cadastrarTarefaAjax('<?php echo $value->id ?>')" type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Tarefas</button>
+   <button onclick="cadastrarTarefaAjax('<?php echo $value->id ?>')" type="button" class="btn btn-xs btn-default pull-right"><i class="fa fa-plus"></i> TASK</button>
 </div>

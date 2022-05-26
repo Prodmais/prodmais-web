@@ -1,14 +1,6 @@
 <?php
 
-$dir = "../.env";
-
-// print('<pre>');
-//     print_r( getenv('ENVIRONMENT'); );
-// print('</pre>');
-
-// $my_env_var = getenv('ENVIRONMENT');
-
-
+// @DESC verifico se está em PRD
 if (getenv('ENVIRONMENT')) {
 
     define('ENVIRONMENT', getenv('ENVIRONMENT'));
@@ -23,11 +15,16 @@ if (getenv('ENVIRONMENT')) {
 
 } else {
 
-    // @DESC env file
+    // @DESC local do .env
+    $dir = "../.env";
+
+    // @DESC se não estiver em producao acesso o arquivo local .env
     if(file_exists($dir)) {
         
+        // @DESC lendo cada linha do arquivo .env
         $lines = file( $dir );
 
+        // @DESC verificando as variaveis estao completas
         if (count($lines) == 9) {
             
             define('ENVIRONMENT', trim(end(explode("=",$lines[0]))));
@@ -41,12 +38,14 @@ if (getenv('ENVIRONMENT')) {
             define('DB_DRIVER',   trim(end(explode("=",$lines[8]))));
 
         } else {
+            // @DESC arquivo .env fora do padrao
             echo ".env not completed!";
             die();
         }
 
     } else {
 
+        // @DESC arquivo .env nao existe
         echo ".env nothing found!";
         die();
 

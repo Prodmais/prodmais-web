@@ -21,27 +21,18 @@
     ]);
   ?>
 
-    <?= $form->field($model, 'name')->textInput(['autocomplete' => 'on', 'placeholder'=>'informe seu username', 'autofocus' => true])->label('Username:') ?>
+    <?= $form->field($model, 'name')->textInput(['autocomplete' => 'on', 'placeholder'=>'email', 'autofocus' => true])->label('Email:') ?>
 
     <?= $form->field($model, 'password')->passwordInput(['autocomplete' => 'new-password', 'placeholder'=>'******'])->label('Password:') ?>
 
     <div style="margin-top: 3em;" class="form-group">
 
-      <div id="div-loader-ajax" style="display: none;">
-
-        <?php echo Html::button('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',[
-            'class' => Html::encode('btn-block btn btn-success')
-          ])
-        ?>
-
-      </div>
-
-      <div id="div-button-submit">
-        <?php echo Html::submitButton(Html::encode('ENTRAR'), [
-            'id' => '',
-            'class' => Html::encode('btn-block btn btn-success')
-          ])
-        ?>
+      <div class="form-group">
+        <!--" SubmitButton Widget -->
+        <?php echo \app\widgets\submitButton\SubmitButtonWidget::widget([
+          'text' => 'ENTRAR',
+          'classButton' => 'btn-block btn btn-default'
+        ]) ?>
       </div>
 
       <div style="margin-top: 15px" >
@@ -49,13 +40,6 @@
       </div>
 
     </div>
-
-    <?php
-      $this->registerJsFile(
-        'web/custom/js/auto-button-ajax-form.js',
-        ['depends' => [\yii\web\JqueryAsset::className()]]
-      );
-    ?>
 
   <?php ActiveForm::end(); ?>
 

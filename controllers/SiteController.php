@@ -75,7 +75,7 @@ class SiteController extends Controller
         //     ]
         // );
 
-        Yii::$app->getResponse()->redirect(["/boards/meus"])->send();
+        Yii::$app->getResponse()->redirect(["/boards"])->send();
 
     }
 
